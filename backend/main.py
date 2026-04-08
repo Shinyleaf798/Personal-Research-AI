@@ -1,18 +1,16 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
+from app.routers import agent, upload
+from app.database import engine
+from app.models import history
+from app.database import Base
 
-load_dotenv()
+# Create all tables on startup if they don't exist
+Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Personal AI Research Agent")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React 前端
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app = FastAPI()
+app.include_router(agent.router)
+app.include_router(upload.router)
 
 @app.get("/")
-async def root():
-    return {"message": "AI Research Agent is running!"}
+def root():
+    return {"status": "AI Research Agent is running"}

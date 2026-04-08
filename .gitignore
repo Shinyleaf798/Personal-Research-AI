@@ -8,3 +8,6 @@ __pycache__/
 
 # System files
 .DS_Store
+
+chroma_db/
+uploaded_files/
